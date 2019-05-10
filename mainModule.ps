@@ -1,0 +1,1902 @@
+%!PS-Adobe-3.0 EPSF-1.2
+%%Title: moodle.v
+%%DocumentNeededResources: font Courier Courier-Bold Courier-Italic Courier-BoldItalic Helvetica Helvetica-Bold Helvetica-Oblique Helvetica-BoldOblique Times-Roman Times-Bold Times-Italic Times-BoldItalic Symbol Symbol Symbol Symbol
+%%Creator: Thuy Thai and TKGate 2.0-b10
+%%CreationDate: 2 May 2019
+%%BoundingBox: 10 10 790 407
+%%EndComments
+%
+% Copyright (C) 1987-2005 by Jeffery P. Hansen
+%    This program (the Postscript Prolog) is free software; you can redistribute
+%    it and/or modify it under the terms of the GNU General Public License
+%    as published by the Free Software Foundation; either version 2 of the
+%    License, or (at your option) any later version.
+%
+%    This program is distributed in the hope that it will be useful,
+%    but WITHOUT ANY WARRANTY; without even the implied warranty of
+%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%    GNU General Public License for more details.
+%
+%    You should have received a copy of the GNU General Public License
+%    along with this program; if not, write to the Free Software
+%    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+%
+
+/isTrace false def
+/LogoWidth 60 def
+/PBsize 60 def
+
+%
+% /key font defLatin1
+%
+% Define key as a latin-1 version of font 
+%
+/defLatin1 {
+  dup length dict begin
+    {1 index /FID ne {def} {pop pop} ifelse} forall
+    /Encoding ISOLatin1Encoding def
+    currentdict
+  end
+  definefont pop
+} def
+
+% Calculate the height of an equalateral triangle with the given sides.
+/theight {
+	2 div
+	3 sqrt
+	mul
+} bind def
+%
+% Genaral parameters to start a gate.
+%
+% x y r startgate
+%
+/startgate {
+	gsave
+	1 setlinewidth
+	3 1 roll
+	translate
+	rotate
+	1 -1 scale
+	newpath
+} bind def
+%
+% x y r startnorotgate
+%
+/startnorotgate {
+  pop 0 startgate
+} def
+%
+% Genaral parameters to start a gate (with position adjustment)
+%
+% x y r [[][][][]] startgate
+%
+/adjstartgate {
+  gsave
+  1 setlinewidth
+  1 index 90 div neg cvi get {} forall	% x y r dx dy
+  exch 5 -1 roll add exch 4 -1 roll add
+  translate
+  rotate
+  1 -1 scale
+  newpath
+} bind def
+%
+% x y r adjstartnorotgate
+%
+/adjstartnorotgate {
+  exch pop 0 exch adjstartgate
+} def
+%
+% Wire
+/wire {
+	gsave
+	10 div
+	setlinewidth
+	newpath
+	moveto lineto
+	stroke
+	grestore
+} bind def
+%
+% (l) j x y wirelabel
+%
+% BetweenLeftAndRight 0x1
+% AtRight 0x2
+% AtLeft 0x4
+% BetweenTopAndBottom 0x8
+% AtBaseline 0x10
+% AtTop 0x20
+% AtBottom 0x40
+%
+/wirelabel {
+  gsave
+  translate
+  8 rfont
+  3 dict begin
+
+  /just exch def
+  /dx 0 def
+  /dy 0 def
+
+  just 64 and 0 ne {  %AtBottom
+    /dy -3 def  } if
+  just 32 and 0 ne {  %AtTop
+    /dy 8 def  } if
+  just 8 and 0 ne {  %BetweenTopAndBottom
+    /dy 4 def  } if
+
+  just 4 and 0 ne {  % AtLeft
+    0 dy LJ
+  } if
+  just 2 and 0 ne {  % AtRight
+    0 dy RJ
+  } if
+  just 1 and 0 ne {  % BetweenLeftAndRight
+    0 dy CT
+  } if
+  end
+  grestore
+} def
+%
+% x y sizesymbol
+%
+/sizesymbol {
+  gsave
+  translate
+  1 setlinewidth
+  -5 5 5 -5 line
+  grestore
+} def
+%
+% x1 y1 x2 y2 s wiresizenote
+%
+/wiresizenote {
+    gsave
+    8 rfont
+    5 1 roll              % s x1 y1 x2 y2
+    dup                   % s x1 y1 x2 y2 y2
+    3 index               % s x1 y1 x2 y2 y2 y1
+    eq 5 1 roll           % s t x1 y1 x2 y2
+    3 -1 roll add 2 div   % s t x1 x2 y'
+    3 1 roll add 2 div    % s t y' x'
+    exch translate        % s t
+    newpath -4 -4 moveto
+    4 4 lineto stroke
+    { 0 -7 CT } { 7 3 LJ } ifelse
+    grestore
+} bind def
+%
+% An inverter bubble
+/inverter {
+   0 startgate
+   1 setgray
+   0 0 2 0 360 arc fill
+   0 setgray
+   0 0 2 0 360 arc stroke
+   grestore
+} bind def
+%
+% x y r arrow
+%
+/arrow {
+    gsave
+    3 1 roll
+    translate
+    1 -1 scale
+    90 mul rotate
+    newpath
+    -2 -.5 moveto 1 -.5 lineto 1 -2.5 lineto
+    4 0 lineto 1 2.5 lineto 1 .5 lineto -2 .5 lineto closepath
+    fill
+    grestore
+} def
+%
+% x y r tri
+%
+/tri {
+    gsave
+    3 1 roll
+    translate
+    90 mul rotate
+    newpath
+    -5 0 moveto -1 -2.5 lineto -1 -.5 lineto 1 -.5 lineto
+    1 -2.5 lineto 5 0 lineto 1 2.5 lineto 1 .5 lineto
+    -1 .5 lineto -1 2.5 lineto closepath
+    fill
+    grestore
+} def
+%
+% Arrow head for ends of wires
+/arrowhead {
+	startgate
+	0.5 setlinewidth
+	newpath
+	-2 -1.5 moveto
+	0 0 lineto
+	-2 1.5 lineto
+	stroke
+	grestore
+} bind def
+%
+% w h pbox
+%
+/pbox {
+  newpath
+  2 copy 2 copy
+  0 0 moveto
+  exch pop 0 exch lineto
+  lineto
+  pop 0 lineto
+  closepath
+} bind def
+%
+% x y w h box
+%
+/box {
+  gsave
+  1 add exch 1 add exch
+  4 2 roll
+  translate
+  -.5 -.5 translate
+  pbox stroke
+  grestore
+} bind def
+
+%
+% x y w h bold_box
+%
+/bold_box {
+  gsave
+  2 setlinewidth
+  4 2 roll
+  translate
+  pbox stroke
+  grestore
+} def
+
+%
+% x1 y2 x2 y2 line
+%
+/line {
+  moveto lineto stroke
+} def
+
+%
+% x1 y2 x2 y2 gline
+%
+/gline {
+  gsave
+  0.5 setgray
+  moveto lineto stroke
+  grestore
+} def
+
+%
+%
+/ds {
+	gsave
+	translate
+	newpath
+	0 0 moveto
+	3 0 lineto
+	3 11 lineto
+	0 11 lineto
+	closepath stroke
+	0 2 moveto 3 2 lineto stroke
+	0 9 moveto 3 9 lineto stroke
+	0 5 moveto
+	3 5 lineto
+	3 6 lineto
+	0 6 lineto
+	closepath fill
+	grestore
+} def
+%
+% x y () hsize
+%
+/hsize {
+	gsave
+	3 1 roll
+	translate
+	6 rfont
+	0 -5 CT
+	newpath
+	0.5 setlinewidth
+	3 -3 moveto -3 3 lineto stroke
+	grestore
+} def
+%
+% x y () hsize
+%
+/vsize {
+	gsave
+	3 1 roll
+	translate
+	6 rfont 
+	5 2 LJ
+	newpath
+	0.5 setlinewidth
+	3 -3 moveto -3 3 lineto stroke
+	grestore
+} def
+%
+% a b max
+%
+/max {
+	2 copy
+	le {exch pop} {pop} ifelse
+} def
+%
+%
+/longestwidth {
+	exch stringwidth pop exch
+	1 sub
+	{exch stringwidth pop max} repeat
+} def
+%
+%
+% Gate Logo (by Miles Bader)
+%
+/size 10 def
+
+/2dup {
+	1 index 1 index
+} def
+
+/gatelogo {
+  gsave
+  translate
+  0 12 translate		% Make space for label
+
+  .45 .45 scale
+  5 size mul neg 0 translate
+
+  0 0 post
+  8 size mul 0 post
+
+  1 setlinewidth
+  0 setgray
+
+  size 2 mul			% 2s
+  dup 4 mul			% 2s 8s
+  2dup				% 2s 8s 2s 8s  
+  size				% 2s 8s 2s 8s s
+  3 1 roll			% 2s 8s s 2s 8s
+  {
+    newpath
+    dup 2 index exch moveto
+    2 index exch lineto
+    stroke
+  } for
+
+  pop pop
+
+  size dup 2.5 mul exch 8.5 mul spikedraw
+  size dup 3.5 mul exch 9.25 mul spikedraw
+  size dup 4.5 mul exch 9.5 mul spikedraw
+
+  newpath
+  size dup 5 mul exch 9 mul 1 index exch moveto
+  0 lineto
+  1 setlinewidth
+  1 setgray
+  stroke
+
+  size dup 5.5 mul exch 9.5 mul spikedraw
+  size dup 6.5 mul exch 9.25 mul spikedraw
+  size dup 7.5 mul exch 8.5 mul spikedraw
+
+  1.5 size mul ifont
+  GateVersion 5 size mul -18 showCentered
+
+  grestore
+} def
+
+/spikedraw {
+	0 setgray
+
+	newpath				% x y
+	2dup moveto			% x y
+	2dup size 2 div 250 290 arc	% x y
+	closepath
+	fill
+
+	newpath
+	2dup size 2 div sub moveto	% x y
+	pop size 2 div lineto		% x y
+	1 setlinewidth
+	stroke
+} def
+
+%
+% Centered show text.
+% (TEXT) x y showCentered
+/showCentered {
+	gsave
+	3 -1 roll
+	dup
+	stringwidth
+	pop 2 div neg 0 translate
+	3 1 roll
+	moveto
+	show
+	grestore
+} def
+
+/post {
+  gsave
+  translate
+
+  newpath
+  0 0 moveto
+  size 2 mul 0 lineto
+  size dup 3.5 mul 4.12 size mul 75.96 104.04 arc
+  closepath
+  gsave 0 setgray 2 setlinewidth stroke grestore
+%	1 setgray fill
+
+  size .66 mul size moveto
+  0 6 size mul rlineto
+  size 1.33 mul size moveto
+  0 6 size mul rlineto
+  0 setgray 0.5 setlinewidth stroke
+
+  newpath
+  size .8	mul					% .8s
+  4.12 3.5 add					% .8s 7.72
+  size mul 1 index add				% .8s 8.52s
+  size exch					% .8s s 8.52s
+  3 -1 roll 0 360 arc
+  gsave 0 setgray 2 setlinewidth stroke grestore
+  .95 setgray fill
+
+  grestore
+} def
+
+
+%
+%  Draw the page box
+%
+% t/f pagebox
+%
+/pagebox {
+  gsave
+
+  %
+  % Draw main frame
+  %
+  1 setlinewidth
+  {
+    newpath
+    LMargin BMargin moveto
+    PageWidth RMargin sub	BMargin	lineto
+    PageWidth RMargin sub PageHeight TMargin sub lineto
+    LMargin PageHeight TMargin sub lineto
+    closepath
+    stroke
+  } {
+    newpath
+    LMargin BMargin moveto
+    PageWidth RMargin sub BMargin lineto
+    PageWidth RMargin sub BMargin LBlock add lineto
+    LMargin BMargin LBlock add lineto
+    closepath
+    stroke
+  } ifelse
+
+  10 dict begin
+    /X1 LMargin def
+    /X2 PageWidth RMargin sub def
+    /X3 PageWidth RMargin sub LogoWidth sub def
+    /XM X1 X3 add 2 div def
+    /Y0 BMargin LBlock add def
+    /Y1 BMargin LBlock 2 mul 3 div add def
+    /Y2 BMargin LBlock 3 div add def
+    /Y3 BMargin def
+
+
+    X1 Y0 moveto  X2 Y0 lineto stroke
+    X1 Y1 moveto  X3 Y1 lineto stroke
+    X1 Y2 moveto  X3 Y2 lineto stroke
+
+    /x1delta 10 def
+    /x2delta 0 def
+    /ydelta 5 def
+
+    12 bfont 
+    X1 x1delta add Y1 ydelta add moveto (Designer:) show
+    X1 x1delta add Y2 ydelta add moveto (Site:) show
+    X1 x1delta add Y3 ydelta add moveto (Date:) show
+
+    XM x2delta add Y1 ydelta add moveto (Document:) show
+    XM x2delta add Y2 ydelta add moveto (Page:) show
+    isTrace {
+      XM x2delta add Y3 ydelta add moveto (Interval:) show
+    } {
+      XM x2delta add Y3 ydelta add moveto (Module:) show
+    } ifelse
+
+    /x1delta 15 (Designer:) stringwidth pop add def
+    /x2delta 5 (Document:) stringwidth pop add def
+
+    12 rfont
+    X1 x1delta add Y1 ydelta add moveto Author show
+    X1 x1delta add Y2 ydelta add moveto Site show
+    X1 x1delta add Y3 ydelta add moveto Date show
+
+    XM x2delta add Y1 ydelta add moveto CircuitName show
+    XM x2delta add Y2 ydelta add moveto PageNumber show
+    XM x2delta add Y3 ydelta add moveto ModuleNames show
+  end
+
+  %
+  % Draw logo
+  %
+  PageWidth RMargin sub LogoWidth sub BMargin moveto
+  0 LBlock rlineto stroke
+  PageWidth RMargin sub LogoWidth 2 div sub BMargin gatelogo
+
+  grestore
+} bind def
+
+%
+% () x y pshow
+%
+/pshow {
+	gsave
+	translate
+	1 -1 scale
+	(_) anchorsearch {
+	    newpath 0 0 moveto
+	    pop dup true charpath pathbbox
+	    0.5 setlinewidth
+	    newpath dup 3 1 roll 2 add moveto exch pop 2 add lineto stroke
+	} if
+	0 0 moveto show
+	grestore
+} def
+%
+% () hj vj x y pjshow 
+%
+/pjshow {
+  gsave
+  translate
+  3 dict begin
+    2 index stringwidth pop /W exch def
+    /S currentfont /ScaleMatrix get 0 get def
+    currentfont /FontBBox get cvx exec
+    /A exch S mul 1000 div def pop /D exch S mul 1000 div def pop
+
+    dup /C eq {
+      0 A D add 2 div translate
+    } if
+    dup /T eq {
+      0 A translate
+    } if
+    dup /B eq {
+      0 D translate
+    } if
+    pop
+
+    dup /C eq {
+      W 2 div neg 0 translate
+    } if
+    dup /R eq {
+      W neg 0 translate
+    } if
+    pop
+  end
+  0 0 pshow
+  grestore
+} def
+
+%
+% () x y pshow
+%
+/prshow {
+	gsave
+	translate
+	(_) anchorsearch {
+	    newpath 0 0 moveto
+	    pop dup true charpath pathbbox
+	    0.5 setlinewidth
+	    newpath dup 3 1 roll 2 add moveto exch pop 2 add lineto stroke
+	} if
+	0 0 moveto show
+	grestore
+} def
+
+%
+% Show a value in a trace.  Do not display if width is greater than wmax
+%
+% () x y wmax trshow
+%
+/trshow {
+  gsave
+  3 1 roll translate
+  1 index stringwidth pop lt {
+    pop
+  } {
+    0 0 prshow
+  } ifelse
+  grestore
+} def
+
+
+%
+% Centered show text.
+% (TEXT) x y CT
+/CT {
+	gsave
+	3 -1 roll
+	dup
+	stringwidth
+	pop 2 div neg 0 translate
+	3 1 roll
+	pshow
+	grestore
+} bind def
+%
+% Centered show text (reversed).
+% (TEXT) x y rCT
+/rCT {
+  gsave
+  translate      
+  1 -1 scale
+  dup
+  stringwidth
+  pop 2 div neg 0 translate
+  0 0 pshow
+  grestore
+} bind def
+%
+% Left Justified show text
+% (TEXT) x y LJ
+/LJ {
+	pshow
+} bind def
+%
+% Right Justified show text.
+% (TEXT) x y RJ
+/RJ {
+	gsave
+	3 -1 roll
+	dup
+	stringwidth
+	pop neg 0 translate
+	3 1 roll
+	pshow
+	grestore
+} bind def
+
+%
+% begin a trace
+%
+% x y w h BT
+%
+/BT {
+  gsave
+  newpath
+  4 2 roll moveto
+  dup 0 exch rlineto
+  exch 0 rlineto
+  neg 0 exch rlineto
+  closepath
+  clip
+  newpath
+} def
+
+%
+% end a trace
+%
+/ET {
+  grestore
+} def
+
+%
+% Begin page
+%
+% (n of n) (mod) BP
+%
+/BP {
+  /ModuleNames exch def
+  gsave
+  IsLandscape { makeLandscape } if
+
+  isepsf {
+    pop
+  } {
+    /PageNumber exch def
+    isTrace not pagebox
+    LMargin BMargin LBlock add translate
+  } ifelse
+} def
+%
+
+% Begin a quandrent page
+%
+% r c nr nc (n of n) (mod) BP_P
+%
+/BP_P {
+  BP
+  PageWidth LMargin sub RMargin sub LogoWidth sub PBsize sub LBlock neg PartBox
+} def
+
+% Begin a scope trace page
+%
+% (n of n) (n-m) BP_T
+/BP_T {
+  /isTrace true def
+  BP
+} def
+
+%
+% End page
+%
+% EP
+%
+/EP { grestore showpage } def
+%
+% Begin module
+%
+% () x y w h BM
+%
+/BM {
+  gsave
+  4 2 roll translate
+
+  newpath
+  0 0 moveto
+  exch dup 0 lineto
+  exch 2 copy lineto
+  exch pop 0 exch lineto
+  closepath
+  clip
+  newpath
+
+  10 rfont
+  5 5 moveto show
+
+} def
+
+%
+% x y w h
+%
+/corners {
+  gsave
+  4 2 roll	% w h x y
+
+  newpath
+  2 copy 5 add moveto 0 -5 rlineto 5 0 rlineto stroke
+  2 copy 4 index add 5 sub moveto 0 5 rlineto 5 0 rlineto stroke
+  2 copy 4 index add exch 5 index add exch 5 sub moveto 0 5 rlineto -5 0 rlineto stroke
+  exch 3 index add 5 sub exch moveto 5 0 rlineto 0 5 rlineto stroke  
+  pop pop
+
+  grestore
+} def
+
+%
+% Begin module with corners
+%
+% () x y w h BM
+%
+/BM_C {
+  4 copy corners
+  BM
+} def
+
+%
+% x y w h
+%
+/PBox {
+  newpath
+  4 2 roll moveto
+  1 index 0 rlineto
+  neg 0 exch rlineto
+  neg 0 rlineto
+  closepath
+} def
+
+%
+% r c nr nc x y
+%
+/PartBox {
+  gsave
+  translate
+  6 dict begin
+    /nc exch def
+    /nr exch def
+    /c exch def
+    /r exch def
+    /boxW PBsize nc div def 
+    /boxH PBsize nr div def 
+
+    0 1 nc 1 sub {
+      0 1 nr 1 sub {
+        2 copy r eq exch c eq and {
+	   2 copy
+	   boxH mul PBsize exch sub exch boxW mul exch  
+           boxW boxH PBox gsave fill grestore stroke
+	} {
+           2 copy
+	   boxH mul PBsize exch sub exch boxW mul exch  
+           boxW boxH PBox gsave 1 setgray fill grestore stroke
+	} ifelse
+        pop
+      } for
+      pop
+    } for
+  end
+  grestore
+} def
+
+%
+% End module
+%
+% EM
+/EM { grestore } def
+
+%
+% makeLandscape
+%
+/makeLandscape {
+   90 rotate
+   0 PageHeight neg translate
+} def
+%
+% x y joint_gray
+%
+/joint_gray {
+   gsave
+   translate
+   0.5 setgray
+   -4 -4 moveto -4 4 lineto 4 4 lineto 4 -4 lineto closepath fill
+   grestore
+} def
+%
+% () t/f x y hgnode
+%
+/hgnode {
+  gsave
+  translate
+  {[3 3] 0 setdash} if
+  dup 5 -5 moveto show newpath
+  0 -10 moveto stringwidth pop 10 add 0 rlineto 0 20 rlineto 0 10 lineto closepath stroke
+  grestore
+} def
+%
+% An COMMENT gate
+%
+/pscomment {
+  0 startgate
+  12 cfont
+  newpath 0 0 moveto
+  { {} forall exch neg 0 exch rmoveto gsave show grestore } forall
+  grestore
+} bind def
+%
+% A Rshifter
+/psrshift {
+  180 sub neg 360 mod neg
+  pslshift
+} def
+%
+% [() ...] l x y o concat
+%
+/psconcat {
+  dup 5 1 roll
+  startgate
+  dup 2 div -5 exch moveto
+  5 0 rlineto
+  dup neg 0 exch rlineto
+  -5 0 rlineto
+  stroke
+  8 rfont
+  exch -180 eq {
+    180 rotate
+    2 div neg 6 exch 12 add moveto
+    {
+      gsave show grestore
+      0 10 rmoveto
+    } forall
+  } {
+    2 div -6 exch 8 sub moveto
+    {
+      gsave dup stringwidth pop neg 0 rmoveto show grestore
+      0 -10 rmoveto
+    } forall
+  } ifelse
+  grestore
+} def
+%
+% An OR gate
+%
+/psor {
+  startgate
+  -10 -7 moveto
+  -2 7 14 -90 -30 arc
+  -2 -7 14 30 90 arc
+  14 theight neg 11 sub 0 14 30 -30 arcn
+  closepath
+  stroke
+  grestore
+} bind def
+%
+% A flip-flop
+/psflipflop {
+  [[0 0][0 0][0 0][0 0]] adjstartgate
+  -15.5 -15.5 moveto
+  -15.5 15.5 lineto
+  15.5 15.5 lineto
+  15.5 -15.5 lineto
+  closepath stroke
+  -5 -15.5 moveto
+  0 -10.5 lineto
+  5 -15.5 lineto
+  stroke
+  7 rfont
+  (_C) -8 6 prshow
+  (_E) 2 6 prshow
+  {
+    (Q) -14 2 prshow
+    (_Q) -14 -8 prshow
+    (D) 8 -3 prshow
+  } {
+    (Q) 8 2 prshow
+    (_Q) 8 -8 prshow
+    (D) -14 -3 prshow
+  } ifelse
+  grestore
+} def
+%
+% dw phi pw x y r clockgate
+%
+/psclock_base {
+  [[-1 0][0 0][1 -1][-3 -2]] adjstartgate
+  -8 -12 moveto
+  16 0 lineto
+  -8 12 lineto
+  closepath
+  stroke
+  -6 -4 moveto
+  -4 -4 lineto
+  -4 4 lineto
+  0 4 lineto
+  0 -4 lineto
+  2 -4 lineto
+  stroke
+  grestore
+} def
+/psclock {
+  3 copy psclock_base
+  startnorotgate
+  0 -20 translate
+  0 0 moveto
+  8 rfont
+  (P = ) show
+  20 string cvs show
+  ( ) show
+  8 syfont
+  (f) show 
+  8 rfont
+  ( = ) show
+  20 string cvs show
+  ( D = ) show
+  20 string cvs show
+  grestore
+} bind def
+% ...and now for something completely different...
+%
+% Okonomiyaki - one serving
+%
+%  3 tbs     Flour
+%  3 tbs     Water
+%  1         Egg
+%  1/8 head  Cabbage (shredded)
+%  1 tbs     Tororo-imo (Japanese potato) [optional]
+%  1 tsp     Benishoga (Pickled ginger)
+%  1 tbs     carrot (shredded)
+%  1 tbs     leeks (shredded)
+%  1 tbs     green pepper (shredded)
+%
+%  Fillings: beef, pork, vegtables
+%
+%  Toppings:
+%            Aonori (seaweed flakes)
+%            Katsuo-bushi (dried fish flakes)
+%            Japanese Tonkatsu Sauce
+%            Mayonaise
+%
+% Mix all of the basic ingedients together in a small bowl.  Place a small
+% quantity of filling on an oiled hot plate or griddle and fry for a few seconds.
+% Pour the okonomiyaki mixture from the bowl on top of the filling and smooth
+% out into a thick pancake-like shape.  Let cook for 5-7 min.  Turn over and cook
+% another 2-3 min.  Spread the tokatsu sauce and mayonaise on top of the okonomiyaki
+% then sprinkle with katuo-bushi and aonori.  Cut into 1/6ths and serve.
+%
+% A Arshifter
+%
+/psarshift {
+  [[0 .5][-.5 .5][2 0.5][0 -.5]] adjstartgate
+  -31 -10.5 moveto
+  -37.5 -5 lineto
+  -37.5 4 lineto
+  -31 10.5 lineto
+  31 10.5 lineto
+  37.5 4 lineto
+  37.5 -5 lineto
+  31 -10.5 lineto
+  closepath stroke
+  -7 2 moveto
+  3 2 lineto
+  3 5 lineto
+  9 0 lineto
+  3 -5 lineto
+  3 -2 lineto
+  -7 -2 lineto
+  closepath fill
+  -9 2 moveto -11 2 lineto
+  -11 -2 lineto -9 -2 lineto
+  closepath fill
+  -9 3 moveto
+  -9 6 lineto
+  -7 6 lineto
+
+  -7 4 lineto
+  -8 4 lineto
+  -6 3 lineto
+  -4 4 lineto
+  -5 4 lineto
+
+  -5 8 lineto
+  -11 8 lineto
+  -11 3 lineto
+  closepath fill
+  grestore
+} def
+%
+% A Lshift
+/pslshift {
+  [[0 .5][-.5 .5][2 0.5][0 -.5]] adjstartgate
+  -31 -10.5 moveto
+  -37.5 -5 lineto
+  -37.5 4 lineto
+  -31 10.5 lineto
+  31 10.5 lineto
+  37.5 4 lineto
+  37.5 -5 lineto
+  31 -10.5 lineto
+  closepath stroke
+  7 2 moveto
+  -3 2 lineto
+  -3 5 lineto
+  -9 0 lineto
+  -3 -5 lineto
+  -3 -2 lineto
+  7 -2 lineto
+  closepath fill
+  grestore
+} def
+%
+% An LED (bit)
+%
+/psled_bit {
+  startgate
+  -5 -7 moveto
+  5 -7 lineto
+  5 0 lineto
+  0 0 5 0 180 arc
+  closepath
+  gsave .8 setgray fill grestore
+  stroke
+  grestore
+} bind def
+%
+% Single bar graph segment
+%
+/psled_barseg {
+  gsave
+  3 -13 translate
+  3 10 pbox 
+  gsave .8 setgray fill grestore
+  stroke
+  grestore
+} def
+%
+% An LED (bar graph)
+%
+/psled_bar {
+  startgate
+  neg 0 0 4 2 roll box
+  1 1 3 -1 roll { psled_barseg 5 0 translate } for
+  grestore
+} bind def
+%
+% Single 7-segment digit
+%
+/psled_7segdig {
+  gsave
+  2 setlinewidth
+  0 -27 translate
+  5 0 17 0 line
+  5 11 17 11 line
+  5 22 17 22 line
+
+  4 1 4 10 line
+  18 1 18 10 line
+  4 12 4 21 line
+  18 12 18 21 line
+  grestore
+} def
+%
+% An LED (7 segment)
+%
+/psled_7seg {
+  startgate
+  neg 0 0 4 2 roll box
+  1 1 3 -1 roll { psled_7segdig 20 0 translate } for
+  grestore
+} bind def
+%
+% An PMOS gate
+%
+/pspmos {
+  [[0 1][1 -1][-1 0][1 1]] adjstartgate
+  -8 9 moveto
+  -8 -8 lineto stroke
+  6.5 8.5 moveto
+  -4 8.5  lineto
+  -4 -7.5 lineto
+  6.5 -7.5 lineto stroke
+  closepath fill
+  -3.5 8.5 moveto
+  -0.5 11 lineto
+  -0.5 6 lineto
+  closepath fill
+  grestore
+} bind def
+%
+% x y r psmult
+%
+/psmult {
+  startgate
+  -30 15.5 moveto
+  -5 15.5 lineto
+  0 10 lineto
+  5 15.5 lineto
+  30 15.5 lineto
+  16 -12.5 lineto
+  -16 -12.5 lineto
+  closepath stroke
+  -3 -3 moveto 3 3 lineto stroke
+  -3 3 moveto 3 -3 lineto stroke
+  grestore
+} def
+%
+% A symbol block gate
+%
+/pssymblock {
+  startgate
+  1 -1 scale
+  {} forall translate 1 exch matrix exch image
+  grestore
+} bind def
+%
+% x y r mux
+%
+/mux {
+    dup /mrot exch def
+    startgate
+    8 rfont
+    -29.5 15.5 moveto
+    29.5 15.5 lineto
+    16.5 -12.5 lineto
+    -16.5 -12.5 lineto
+    closepath stroke
+    dup					% n n
+    1 add 58 exch div			% n d1
+    2 copy mul				% n d1 dn
+    mrot -90 eq mrot -180 eq or {
+      3 -1 roll 1 sub 50 string cvs exch (0) exch	% d1 (n) (0) dn
+      -29 add 7 rCT				% d1
+      exch -29 add 7 rCT
+    } {
+      3 -1 roll 1 sub 50 string cvs exch	% d1 (n) dn
+      -29 add 7 rCT				% d1
+      (0) exch -29 add 7 rCT
+    } ifelse
+    grestore
+} def
+%
+% x y r vdd
+%
+/psvdd {
+  startgate
+  -19 0 moveto -3 0 lineto stroke
+  10 rfont
+  -1 -4 moveto (V) show
+  8 rfont
+  0 -3 rmoveto (dd) show
+  grestore
+} def
+%
+% An NMOS gate
+%
+/psnmos {
+  [[0 0][0 -1][-1 1][0 -1]] adjstartgate
+  -8 8 moveto
+  -8 -9 lineto stroke
+  6.5 7.5 moveto
+  -4 7.5  lineto
+  -4 -8.5 lineto
+  6.5 -8.5 lineto stroke
+  6 -8.5 moveto
+  2 -11 lineto
+  2 -6 lineto
+  closepath fill
+  grestore
+} bind def
+%
+% A Register
+/register {
+  [[0 0][-1 1][2 1][0 -1]] adjstartgate
+  -36.5 -10.5 moveto
+  -36.5 9.5 lineto
+  38.5 9.5 lineto
+  38.5 -10.5 lineto
+  closepath stroke
+  -36.5 -7 moveto
+  -30 0 lineto
+  -36.5 7 lineto stroke
+  7 rfont
+  (_CLR) dup stringwidth pop neg 36 add 0 prshow
+  (_EN) dup stringwidth pop neg 36 add -9 prshow
+  grestore
+} def
+%
+% x y r adder
+%
+/psadder {
+  startgate
+  -30 15.5 moveto
+  -5 15.5 lineto
+  0 10 lineto
+  5 15.5 lineto
+  30 15.5 lineto
+  16 -12.5 lineto
+  -16 -12.5 lineto
+  closepath stroke
+  -3 0 moveto 3 0 lineto stroke
+  0 3 moveto 0 -3 lineto stroke
+  19 2 2 0 360 arc closepath fill
+  grestore
+} def
+%
+% x y r ram
+%
+/psram {
+  startgate
+  -17.5 23.5 moveto
+  16.5 23.5 lineto
+  16.5 -25.5 lineto
+  -17.5 -25.5 lineto
+  closepath stroke
+  8 rfont
+  -15 -2 moveto (A) show
+  5 -2 moveto (D) show
+  6 rfont
+  (_cs) -11 -23 prshow
+  (_oe) 4 -23 prshow
+  (_we) -4 16 prshow
+  grestore
+} def
+%
+% A Roller
+/psroll {
+  [[0 .5][-.5 .5][2 0.5][0 -.5]] adjstartgate
+  -31 -10.5 moveto
+  -37.5 -5 lineto
+  -37.5 4 lineto
+  -31 10.5 lineto
+  31 10.5 lineto
+  37.5 4 lineto
+  37.5 -5 lineto
+  31 -10.5 lineto
+  closepath stroke
+  2 setlinewidth
+  newpath
+  0 0 6 20 340 arc stroke
+  30 rotate
+  4 0 translate
+  -70 rotate
+  -1.5 0 moveto 1.5 0 lineto
+  0 3 lineto closepath stroke
+  grestore
+} def
+%
+% A Buffer
+/psbuf {
+  startgate
+  -5.5 -7.5 moveto
+  9.5 0 lineto
+  -5.5 7.5 lineto
+  closepath
+  stroke
+  grestore
+} bind def
+%
+% x y r psrom
+%
+/psrom {
+  startgate
+  -17.5 23.5 moveto
+  16.5 23.5 lineto
+  16.5 -25.5 lineto
+  -17.5 -25.5 lineto
+  closepath stroke
+  8 rfont
+  -15 -2 moveto (A) show
+  5 -2 moveto (D) show
+  6 rfont
+  (_oe) -4 -23 prshow
+  grestore
+} def
+/triiogate {
+  startgate
+  0 -3 moveto
+  6 0 lineto
+  0 3 lineto
+  -6 0 lineto
+  closepath
+  stroke
+  grestore
+} bind def
+%
+% A Switch
+/switchgate {
+  startnorotgate
+  % Outer Box
+  4 setlinewidth
+  -18 -12 moveto
+  15 -12 lineto
+  15 12 lineto
+  1 setlinewidth
+  -18 12 lineto
+  closepath
+  stroke
+  gsave      % Inner Box
+  -5 -9 moveto
+  -5 10 lineto
+  -16 10 lineto
+  -16 -9 lineto
+  closepath
+  stroke
+  0.8 setgray
+  -5 -9 moveto
+  -5 10 lineto
+  -16 10 lineto
+  -16 -9 lineto
+  closepath
+  fill
+  grestore
+  -8 0 moveto    % Knives
+  -8 7 lineto
+  -13 7 lineto
+  -13 0 lineto
+  stroke
+  -10.5 7  moveto    % Handle
+  -10.5 7.5 lineto
+  stroke
+  -10.5 8 1 0 360 arc
+  closepath
+  fill
+  -7 -1 moveto    % Hinges
+  -7 1 lineto
+  -9 -1 moveto
+  -9 1 lineto
+  -12 -1 moveto
+  -12 1 lineto
+  -14 -1 moveto
+  -14 1 lineto
+  stroke
+  -7 5 1 0 360 arc  % Clips
+  closepath fill
+  newpath
+  -9 5 1 0 360 arc
+  closepath fill
+  newpath
+  -12 5 1 0 360 arc
+  closepath fill
+  newpath
+  -14 5 1 0 360 arc
+  closepath fill
+  newpath
+  -7 -5 1 0 360 arc
+  closepath fill
+  newpath
+  -9 -5 1 0 360 arc
+  closepath fill
+  newpath
+  -12 -5 1 0 360 arc
+  closepath fill
+  newpath
+  -14 -5 1 0 360 arc
+  closepath fill
+  8 rfont
+  -3 4 moveto
+  (on) show
+  -3 -7 moveto
+  (off) show
+  grestore
+} bind def
+%
+% An frame gate
+%
+/psframe {
+  gsave
+  translate
+  pbox
+  [3 3] 0 setdash
+  stroke
+  [] 0 setdash
+  1 setgray 2 setlinewidth
+  10 0 moveto 10 add 0 rlineto stroke
+  0 setgray
+  grestore
+} bind def
+%
+% A Solder Joint
+%
+/joint {
+  startgate
+  0 0 2 0 360 arc
+  closepath
+  fill
+  grestore
+} bind def
+%
+% x y r demux
+%
+/demux {
+    startgate
+    8 rfont
+    (demux) 0 5 rCT
+    -16.5 12.5 moveto
+    16.5 12.5 lineto
+    29.5 -15.5 lineto
+    -29.5 -15.5 lineto
+    closepath stroke
+    dup					% n n
+    1 add 58 exch div			% n d1
+    2 copy mul				% n d1 dn
+    3 -1 roll 1 sub 50 string cvs exch	% d1 (n) dn
+    -29 add -12 rCT				% d1
+    (0) exch -29 add -12 rCT
+    grestore
+} def
+%
+% (v) x y r dip
+%
+/psdip {
+  dup 4 1 roll
+  startnorotgate
+  3.5 0.5 translate
+  -42 -10 moveto
+  34 -10 lineto
+  34 10 lineto
+  -42 10 lineto
+  closepath stroke
+  8 rfont
+  1 -1 scale
+  -180 eq { 38 5 LJ } { -4 -12 CT } ifelse
+  1 -1 scale
+  5 rfont
+  -38 3 moveto (ON) show
+  -38 -6 moveto (OFF) show
+  -24 7 25 {-5 ds} for
+  grestore
+} def
+%
+% An input pin
+%
+/psin {
+  startgate
+  -6 -3 moveto
+  0 0 lineto
+  -6 3 lineto
+  stroke
+  grestore
+} bind def
+%
+% 'OR' part of XOR gate
+%
+/base_xor {
+  startgate
+  -10 -7 moveto
+  -5 7 14 -90 -30 arc
+  -5 -7 14 30 90 arc
+  14 theight neg 11 sub 0 14 30 -30 arcn
+  closepath
+  stroke
+  grestore
+} bind def
+%
+% An XOR Gate
+%
+/psxor {
+  startgate
+  3 0 0 base_xor
+  14 theight neg 11 sub 0 14 30 -30 arcn
+  stroke
+  grestore
+} bind def
+%
+% A Splice
+/pstap {
+  [[-2 0][0 -1][-1 0][0 -2]] adjstartgate
+  -4 -3 moveto
+  -2 -3 lineto
+  2 0 lineto
+  -2 3 lineto
+  -4 3 lineto
+  8 rfont
+  4 4 moveto show
+  closepath fill
+  grestore
+} def
+%
+% An output pin
+%
+/psout {
+  startgate
+  -6 -3 moveto
+  3 0 lineto
+  -6 3 lineto
+  stroke
+  grestore
+} bind def
+%
+% A JK flip-flop
+/psjkff {
+  [[0 0][0 0][0 0][0 0]] adjstartgate
+  -15.5 -15.5 moveto
+  -15.5 15.5 lineto
+  15.5 15.5 lineto
+  15.5 -15.5 lineto
+  closepath stroke
+  -5 -15.5 moveto
+  0 -10.5 lineto
+  5 -15.5 lineto
+  stroke
+  7 rfont
+  (_C) -8 6 prshow
+  (_P) 2 6 prshow
+  {
+    (Q) -14 2 prshow
+    (_Q) -14 -8 prshow
+    (J) 8 2 prshow
+    (K) 8 -8 prshow
+  } {
+    (Q) 8 2 prshow
+    (_Q) 8 -8 prshow
+    (J) -14 2 prshow
+    (K) -14 -8 prshow
+  } ifelse
+  grestore
+} def
+%
+% x y r decoder
+%
+/decoder {
+    startgate
+    8 rfont
+    (dec) 0 5 rCT
+    -16.5 12.5 moveto
+    16.5 12.5 lineto
+    29.5 -15.5 lineto
+    -29.5 -15.5 lineto
+    closepath stroke
+    dup					% n n
+    1 add 58 exch div			% n d1
+    2 copy mul				% n d1 dn
+    3 -1 roll 1 sub 50 string cvs exch	% d1 (n) dn
+    -29 add -12 rCT				% d1
+    (0) exch -29 add -12 rCT
+    grestore
+} def
+%
+% x y r ground
+%
+/psground {
+  startgate
+  -4 6 moveto 4 6 lineto stroke
+  -3 4 moveto 3 4 lineto stroke
+  -2 2 moveto 2 2 lineto stroke
+  -1 0 moveto 1 0 lineto stroke
+  grestore
+} def
+%
+% A Script
+/script {
+  [[0 0][0 0][0 0][0 0]] adjstartgate
+  -15.5 -15.5 moveto
+  -15.5 15.5 lineto
+  15.5 15.5 lineto
+  15.5 -15.5 lineto
+  closepath stroke
+  grestore
+} def
+%
+% x y r psdiv
+%
+/psdiv {
+  startgate
+  -30 15.5 moveto
+  -5 15.5 lineto
+  0 10 lineto
+  5 15.5 lineto
+  30 15.5 lineto
+  16 -12.5 lineto
+  -16 -12.5 lineto
+  closepath stroke
+  -3 0 moveto 3 0 lineto stroke
+  0 3 1 0 360 arc closepath fill
+  0 -3 1 0 360 arc closepath fill
+  grestore
+} def
+%
+% An AND gate
+%
+/psand {
+  startgate
+  2.5 7 moveto
+  -10.5 7 lineto
+  -10.5 -7 lineto
+  2.5 -7 lineto
+  2.5 0 7 -90 90 arc
+  closepath
+  stroke
+  grestore
+} bind def
+
+/Author (Thuy Thai) def
+/Site (Earth) def
+/Date (May 2, 2019) def
+/CircuitName (moodle.v) def
+/isepsf true def
+/NumPages ( of 1) def
+/GateVersion (TKGate 2.0-b10) def
+/IsLandscape false def
+/PageWidth 612.00 def
+/PageHeight 792.00 def
+/LMargin 25 def
+/RMargin 25 def
+/TMargin 25 def
+/BMargin 25 def
+/LBlock 60 def
+/Courier-Latin1 /Courier findfont defLatin1
+/Courier-Bold-Latin1 /Courier-Bold findfont defLatin1
+/Courier-Italic-Latin1 /Courier-Italic findfont defLatin1
+/Courier-BoldItalic-Latin1 /Courier-BoldItalic findfont defLatin1
+/Helvetica-Latin1 /Helvetica findfont defLatin1
+/Helvetica-Bold-Latin1 /Helvetica-Bold findfont defLatin1
+/Helvetica-Oblique-Latin1 /Helvetica-Oblique findfont defLatin1
+/Helvetica-BoldOblique-Latin1 /Helvetica-BoldOblique findfont defLatin1
+/Times-Roman-Latin1 /Times-Roman findfont defLatin1
+/Times-Bold-Latin1 /Times-Bold findfont defLatin1
+/Times-Italic-Latin1 /Times-Italic findfont defLatin1
+/Times-BoldItalic-Latin1 /Times-BoldItalic findfont defLatin1
+/Symbol-Latin1 /Symbol findfont defLatin1
+/Symbol-Latin1 /Symbol findfont defLatin1
+/Symbol-Latin1 /Symbol findfont defLatin1
+/Symbol-Latin1 /Symbol findfont defLatin1
+/cfont { /Courier-Latin1 findfont exch scalefont setfont } bind def
+/rfont { /Helvetica-Latin1 findfont exch scalefont setfont } bind def
+/bfont { /Helvetica-Bold-Latin1 findfont exch scalefont setfont } bind def
+/ifont { /Helvetica-Oblique-Latin1 findfont exch scalefont setfont } bind def
+/bifont { /Helvetica-BoldOblique-Latin1 findfont exch scalefont setfont } bind def
+/syfont { /Symbol findfont exch scalefont setfont } bind def
+%%EndProlog
+
+
+%%Page: 1 1
+(1 of 1) (main) BP
+() 10 10 780 397 BM
+gsave
+0 397 translate
+0.949622 0.949622 scale
+1 -1 scale
+195.689655 176.530504 translate
+newpath
+193 39 moveto
+193 -37 lineto
+stroke
+newpath
+195 41 moveto
+311 41 lineto
+311 165 lineto
+346 165 lineto
+stroke
+newpath
+51 13 moveto
+81 13 lineto
+81 41 lineto
+191 41 lineto
+stroke
+newpath
+558 114 moveto
+558 154 lineto
+425 154 lineto
+stroke
+newpath
+464 118 moveto
+464 181 lineto
+425 181 lineto
+stroke
+newpath
+598 112 moveto
+598 145 lineto
+425 145 lineto
+stroke
+newpath
+513 115 moveto
+513 165 lineto
+425 165 lineto
+stroke
+newpath
+250 28 moveto
+250 -38 lineto
+stroke
+newpath
+252 30 moveto
+316 30 lineto
+316 154 lineto
+346 154 lineto
+stroke
+newpath
+51 2 moveto
+88 2 lineto
+88 30 lineto
+248 30 lineto
+stroke
+newpath
+275 19 moveto
+275 -38 lineto
+stroke
+newpath
+277 21 moveto
+321 21 lineto
+321 145 lineto
+346 145 lineto
+stroke
+newpath
+51 -7 moveto
+91 -7 lineto
+91 21 lineto
+273 21 lineto
+stroke
+newpath
+147 50 moveto
+147 -37 lineto
+stroke
+newpath
+149 52 moveto
+305 52 lineto
+305 175 lineto
+346 175 lineto
+stroke
+newpath
+51 29 moveto
+70 29 lineto
+70 52 lineto
+145 52 lineto
+stroke
+newpath
+-85 -123 moveto
+-75 -123 lineto
+-75 13 lineto
+-28 13 lineto
+stroke
+newpath
+-28 2 moveto
+-39 2 lineto
+-39 -52 lineto
+-29 -52 lineto
+-29 -123 lineto
+-33 -123 lineto
+stroke
+newpath
+-28 -7 moveto
+-30 -7 lineto
+-30 -31 lineto
+40 -31 lineto
+40 -123 lineto
+25 -123 lineto
+stroke
+newpath
+-141 -123 moveto
+-131 -123 lineto
+-131 23 lineto
+-28 23 lineto
+stroke
+-50 -123 0 switchgate
+193 -44 0 psled_bit
+-27 -17 77 96 box
+(I0) /L /C -24 -4 pjshow
+-33 -3 0 arrow
+(I1) /L /C -24 5 pjshow
+-33 6 0 arrow
+(I2) /L /C -24 16 pjshow
+-33 17 0 arrow
+(I3) /L /C -24 26 pjshow
+-33 27 0 arrow
+(O0) /R /C 47 -4 pjshow
+56 -3 0 arrow
+(O1) /R /C 47 5 pjshow
+56 6 0 arrow
+(O2) /R /C 47 16 pjshow
+56 17 0 arrow
+(O3) /R /C 47 32 pjshow
+56 33 0 arrow
+/Helvetica-Latin1 findfont 10 scalefont setfont
+(twosComp) /C /C 11 31 pjshow
+/Helvetica-Latin1 findfont 12 scalefont setfont
+(Signed    |  Signed Two's) /L /L 370 -154 pjshow
+(Magnitude |   Complement) /L /L 370 -140 pjshow
+(0111      |   0111) /L /L 370 -126 pjshow
+(0110      |   0110) /L /L 370 -112 pjshow
+(0101      |   0101) /L /L 370 -98 pjshow
+(0100      |   0100) /L /L 370 -84 pjshow
+(0011      |   0011) /L /L 370 -70 pjshow
+(0010      |   0010) /L /L 370 -56 pjshow
+(0001      |   0001) /L /L 370 -42 pjshow
+(0000      |   0000) /L /L 370 -28 pjshow
+(1000      |   0000) /L /L 370 0 pjshow
+(1001      |   1111) /L /L 370 14 pjshow
+(1010      |   1110) /L /L 370 28 pjshow
+(1011      |   1101) /L /L 370 42 pjshow
+(1100      |   1100) /L /L 370 56 pjshow
+(1101      |   1011) /L /L 370 70 pjshow
+(1110      |   1010) /L /L 370 84 pjshow
+(1111      |   1001) /L /L 370 98 pjshow
+(          ) /L /L 370 112 pjshow
+193 41 0 joint
+558 107 0 psled_bit
+147 52 0 joint
+275 21 0 joint
+-102 -123 0 switchgate
+275 -45 0 psled_bit
+147 -44 0 psled_bit
+8 -123 0 switchgate
+598 105 0 psled_bit
+513 108 0 psled_bit
+250 -45 0 psled_bit
+-158 -123 0 switchgate
+347 135 77 96 box
+/Helvetica-Latin1 findfont 8 scalefont setfont
+(I0) /L /C 350 148 pjshow
+341 149 0 arrow
+(I1) /L /C 350 157 pjshow
+341 158 0 arrow
+(I2) /L /C 350 168 pjshow
+341 169 0 arrow
+(I3) /L /C 350 178 pjshow
+341 179 0 arrow
+(O0) /R /C 421 148 pjshow
+430 149 0 arrow
+(O1) /R /C 421 157 pjshow
+430 158 0 arrow
+(O2) /R /C 421 168 pjshow
+430 169 0 arrow
+(O3) /R /C 421 184 pjshow
+430 185 0 arrow
+/Helvetica-Latin1 findfont 10 scalefont setfont
+(twosComp) /C /C 385 183 pjshow
+250 30 0 joint
+464 111 0 psled_bit
+grestore
+EM
+EP
+%%Tailer
